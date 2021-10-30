@@ -1,5 +1,6 @@
 const express = require('express')
 const cors = require('cors');
+const ObjectId = require('mongodb').ObjectId;
 const app = express();
 require("dotenv").config();
 app.use(cors());
@@ -23,18 +24,27 @@ async function run() {
     const allServices = database.collection("services");
     const mostPopular = database.collection("mostPopularServices");
     console.log("connected");
+    // GET ALL THE POPULAR SERVICES
     app.get("/popular", async (req, res) => {
       const cursor = mostPopular.find({});
       const result = await cursor.toArray();
       console.log("gettind the reuslt");
       res.json(result);
     })
+    // GET ALL THE MAIN SERVICES
     app.get("/services", async (req, res) => {
       const anything = allServices.find({});
       const services = await anything.toArray();
       console.log("getting the services");
       res.json(services);
     })
+    // GET SINGLE SERVICE BY _ID
+    app.get("/services/:id", async (req, res) => {
+      const query = req.params.id;
+      const singleService = await allServices.findOne({ _id: ObjectId(query) });
+      res.json(singleService)
+    })
+
   } finally {
     // await client.close();
   }
