@@ -9,7 +9,6 @@ const port = process.env.PORT;
 
 const { MongoClient } = require('mongodb');
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.bvkvy.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
-console.log(uri);
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 
@@ -20,7 +19,6 @@ async function run() {
     const allServices = database.collection("services");
     const mostPopular = database.collection("mostPopularServices");
     const orders = database.collection("orders");
-    console.log("connected");
 
     // GET ALL THE POPULAR SERVICES
     app.get("/popular", async (req, res) => {
@@ -49,7 +47,6 @@ async function run() {
     // POST A SERVICE
     app.post('/services', async (req, res) => {
       const service = req.body;
-      console.log(service);
       const result = await allServices.insertOne(service);
       res.json(result)
     })
