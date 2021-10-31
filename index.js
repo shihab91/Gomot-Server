@@ -21,6 +21,7 @@ async function run() {
     const mostPopular = database.collection("mostPopularServices");
     const orders = database.collection("orders");
     console.log("connected");
+
     // GET ALL THE POPULAR SERVICES
     app.get("/popular", async (req, res) => {
       const cursor = mostPopular.find({});
@@ -46,11 +47,19 @@ async function run() {
       const result = await orders.insertOne(order);
       res.json(result);
     })
+
+    // GET ALL THE ORDERS
     app.get('/orders', async (req, res) => {
       const cursor = orders.find({});
       const result = await cursor.toArray();
       res.json(result);
     })
+    app.delete("/orders/:id", async (req, res) => {
+      const query = req.params.id;
+      const result = await orders.deleteOne({ _id: ObjectId(query) });
+      res.send(result)
+    })
+
   } finally {
     // await client.close();
   }
