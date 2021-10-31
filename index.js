@@ -40,7 +40,19 @@ async function run() {
       const singleService = await allServices.findOne({ _id: ObjectId(query) });
       res.json(singleService)
     })
-
+    // DELETE A SERVICE
+    app.delete("/services/:id", async (req, res) => {
+      const query = req.params.id;
+      const result = await allServices.deleteOne({ _id: ObjectId(query) });
+      res.json(result)
+    })
+    // POST A SERVICE
+    app.post('/services', async (req, res) => {
+      const service = req.body;
+      console.log(service);
+      const result = await allServices.insertOne(service);
+      res.json(result)
+    })
     // POST AN ORDER
     app.post("/orders", async (req, res) => {
       const order = req.body;
@@ -54,6 +66,7 @@ async function run() {
       const result = await cursor.toArray();
       res.json(result);
     })
+    // DELETE AN ORDER
     app.delete("/orders/:id", async (req, res) => {
       const query = req.params.id;
       const result = await orders.deleteOne({ _id: ObjectId(query) });
